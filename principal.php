@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+	<title>Pidelo por Maps</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxwbFVqKVoA8WR6wmqsoBsuUEc45OvP5g&sensor=false" ></script>
         <script src="lib/js/jquery.min.js"></script>
@@ -15,11 +16,31 @@
         </script>
     </head>
     <body>
-        <h1> PIDELO CON MAPS</h1>
-        <div id="map-canvas"></div>
-        <div id="leyenda-canvas">
-            <h4>USUARIOS</h4>
-        </div>
+	<div class="container-fluid">
+	    <div class="row">
+		<div class="col-md-10">
+		    <h1>PIDELO CON MAPS</h1>
+		</div>
+		<div class="col-md-2 pull-right">
+		    <h1><button class="btn btn-lg btn-primary">Facebook</button></h1>
+		</div>
+	    </div>
+	    <div class="row">
+		<div class="col-md-9">
+		    <div id="map-canvas">
+			
+		    </div>
+		</div>
+		<div class="col-md-3">
+		    <div class="panel panel-default">
+		      <div class="panel-heading"><h4>USUARIOS</h4></div>
+		      <div class="panel-body">
+			...
+		      </div>
+		    </div>
+		</div>
+	    </div>
+	</div>
     </body>
 </html>
 
