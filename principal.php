@@ -7,10 +7,10 @@ if (!isset($_SESSION['token'])) {
 <!DOCTYPE html>
 <html>
     <head>
-
         <title>Pidelo por Maps</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
         <link rel="stylesheet" href="lib/css/bootstrap.min.css" type="text/css" media="screen" />
+        <script src="https://desk-customers.s3.amazonaws.com/shared/sessvars.js" type="text/javascript"></script>
         <link rel="stylesheet" href="lib/css/principal.css" type="text/css" />
         <script type="text/javascript" src="lib/js/jquery.min.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxwbFVqKVoA8WR6wmqsoBsuUEc45OvP5g&sensor=false" ></script>
@@ -26,6 +26,7 @@ if (!isset($_SESSION['token'])) {
     </head>
     <body>
         <a class='logout' href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] ?>/ubicaciones/index.php?logout">Logout</a>
+        <input type="hidden" id="session_email" value="<?php echo $_SESSION['email'] ?>"/>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-10">
@@ -53,9 +54,9 @@ if (!isset($_SESSION['token'])) {
                                     $result = mysql_query($query) or die('Consulta fallida: ' . mysql_error());
                                     // Imprimir los resultados en HTML
                                     while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
-                                        echo "<div class='col-md-12'>"
-                                                . "<img src='" . $line['imagen'] . "?sz=50'>" . "<span class='col-md-9' >".$line['nombres'] 
-                                            ."</span></div>";
+                                        echo "<div class='col-md-8'>"
+                                        . "<img src='" . $line['imagen'] . "?sz=50'></div>" . "<div class='col-md-9' >" . $line['nombres']
+                                        . "</div>";
                                     }
                                     // Liberar resultados
                                     mysql_free_result($result);

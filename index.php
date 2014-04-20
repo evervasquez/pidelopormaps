@@ -55,12 +55,23 @@ if ($client->getAccessToken()) {
 } else {
     $authUrl = $client->createAuthUrl();
 }
+
+require_once(dirname(__FILE__) . '/lib/face-sdk/facebook.php');
+require_once (dirname(__FILE__) . '/lib/face-sdk/config.php');
+$config = array(
+    'appId' => APP_ID,
+    'secret' => APP_SECRET,
+    'cookie' => true
+);
+
+$facebook = new Facebook($config);
+$user_id = $facebook->getUser();
 ?>
 <!doctype html>
 <html>
     <head><meta charset="utf-8">
-    <link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
-    <style>
+        <link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
+        <style>
             body {
                 font-family: 'Sniglet',serif;
             }
@@ -72,19 +83,38 @@ if ($client->getAccessToken()) {
             <?php print $personMarkup ?>
         <?php endif ?>
         <?php
-        if (isset($authUrl)) {
-            print "<a class='login' href='$authUrl'>Iniciar Sesión</a>";
+        if (isset($authUrl) || !isset($user_id)) {
+            echo "Inicio Sesión con <a class='login' href='$authUrl'>Google</a></br>";
+            $login_url = $facebook->getLoginUrl();
+            echo 'Inicio Sesión con <a href="' . $login_url . '">Facebook</a>';
         } else {
+            if ($user) {
+                try {
+                    //472148372819412 = la jungla
+                    $user_profile = $facebook->api('/me', 'GET');
+                    $fotoPerfil = "<img src='http://graph.facebook.com/" . $user_profile['id'] . "/picture?type=small'/>";
+                    echo $fotoPerfil . "My Name: " . $user_profile['name'];
+
+                    $token = $facebook->getAccessToken();
+                } catch (FacebookApiException $e) {
+                    $login_url = $facebook->getLoginUrl(array(
+                        'scope' => 'user_status,publish_stream,user_photos,user_photo_video_tags'
+                    ));
+
+                    echo 'Please <a href="' . $login_url . '">login.</a>';
+                    error_log($e->getType());
+                    error_log($e->getMessage());
+                }
+            }
             print "<a class='login' href='principal.php'>Ir a Mapa</a></br>";
             if ($_SESSION['autenticado']) {
                 print "<a class='logout' href='?logout'>Logout</a></br>";
             }
 
+            //ingresa el usuario a la base de datos
             $link = mysql_connect('localhost', 'root', 'admin')or die('No se pudo conectar: ' . mysql_error());
             mysql_select_db('ubicaciones') or die('No se pudo seleccionar la base de datos');
-
             $nuevo_email = mysql_query("select email from usuarios where correo='$email'");
-            
             if (mysql_num_rows($nuevo_email) == 0) {
                 $query = 'INSERT INTO usuarios(nombres,email,imagen) '
                         . 'VALUES ("' . $name . '","' . $email . '","' . $img . '")';
