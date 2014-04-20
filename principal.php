@@ -10,16 +10,15 @@ if (!isset($_SESSION['token'])) {
 
         <title>Pidelo por Maps</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-        <script src="lib/js/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="lib/css/bootstrap.min.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="lib/css/principal.css" type="text/css" />
+        <script type="text/javascript" src="lib/js/jquery.min.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxwbFVqKVoA8WR6wmqsoBsuUEc45OvP5g&sensor=false" ></script>
         <script type="text/javascript" src="lib/js/principal.js" ></script>
-        <link rel="stylesheet" href="lib/css/principal.css" type="text/css" />
-        <link rel="stylesheet" href="lib/css/bootstrap.min.css" type="text/css" media="screen" />
+
         <script type="text/javascript">
             google.maps.event.addDomListener(window, 'load', initialize);
-
             $(function() {
-                
                 cargarMarcadores();
             });
         </script>
@@ -43,22 +42,29 @@ if (!isset($_SESSION['token'])) {
                     <div class="panel panel-default">
                         <div class="panel-heading"><h4>USUARIOS</h4></div>
                         <div class="panel-body">
-                            <?php
-                            $link = mysql_connect('localhost', 'root', 'admin')or die('No se pudo conectar: ' . mysql_error());
-                            mysql_select_db('ubicaciones') or die('No se pudo seleccionar la base de datos');
-                            $query = "select nombres,imagen,email from usuarios where estado=1";
+                            <div class="container-fluid">
+                                <div class="row">
 
-                            $result = mysql_query($query) or die('Consulta fallida: ' . mysql_error());
-                            // Imprimir los resultados en HTML
-                            while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
-                                echo "<div><img src='" . $line['imagen'] . "?sz=50'></div>" . $line['nombres'];
-                            }
-                            // Liberar resultados
-                            mysql_free_result($result);
-                            // Cerrar la conexión
-                            mysql_close($link);
-                            ?>
+                                    <?php
+                                    $link = mysql_connect('localhost', 'root', 'admin')or die('No se pudo conectar: ' . mysql_error());
+                                    mysql_select_db('ubicaciones') or die('No se pudo seleccionar la base de datos');
+                                    $query = "select nombres,imagen,email from usuarios where estado=1";
 
+                                    $result = mysql_query($query) or die('Consulta fallida: ' . mysql_error());
+                                    // Imprimir los resultados en HTML
+                                    while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
+                                        echo "<div class='col-md-12'>"
+                                                . "<img src='" . $line['imagen'] . "?sz=50'>" . "<span class='col-md-9' >".$line['nombres'] 
+                                            ."</span></div>";
+                                    }
+                                    // Liberar resultados
+                                    mysql_free_result($result);
+                                    // Cerrar la conexión
+                                    mysql_close($link);
+                                    ?>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -67,6 +73,7 @@ if (!isset($_SESSION['token'])) {
     </body>
     <script type="text/javascript" src="lib/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="lib/js/validaciones.js"></script>
+    <script src="lib/js/bootbox.min.js"></script>
 </html>
 
 
@@ -77,6 +84,7 @@ if (!isset($_SESSION['token'])) {
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel">Ingresar Parrilladas</h4>
+                <input type="hidden" name="id" id="id" value="0"/>
             </div>
             <div class="modal-body">
 
