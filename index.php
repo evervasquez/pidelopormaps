@@ -58,7 +58,14 @@ if ($client->getAccessToken()) {
 ?>
 <!doctype html>
 <html>
-    <head><meta charset="utf-8"></head>
+    <head><meta charset="utf-8">
+    <link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
+    <style>
+            body {
+                font-family: 'Sniglet',serif;
+            }
+        </style>
+    </head>
     <body>
         <header><h1>Pidelo Con Maps</h1></header>
         <?php if (isset($personMarkup)): ?>
@@ -76,16 +83,13 @@ if ($client->getAccessToken()) {
             $link = mysql_connect('localhost', 'root', 'admin')or die('No se pudo conectar: ' . mysql_error());
             mysql_select_db('ubicaciones') or die('No se pudo seleccionar la base de datos');
 
-            $nuevo_email = mysql_query("select correo from usuarios where correo='$email'");
+            $nuevo_email = mysql_query("select email from usuarios where correo='$email'");
             
             if (mysql_num_rows($nuevo_email) == 0) {
-                $query = 'INSERT INTO usuarios(nombres,correo,imagen) '
+                $query = 'INSERT INTO usuarios(nombres,email,imagen) '
                         . 'VALUES ("' . $name . '","' . $email . '","' . $img . '")';
                 $result = mysql_query($query) or die('Consulta fallida: ' . mysql_error());
             }
-
-            
-
             mysql_close($link);
         }
         ?>

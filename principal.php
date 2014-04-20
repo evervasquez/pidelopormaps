@@ -7,26 +7,30 @@ if (!isset($_SESSION['token'])) {
 <!DOCTYPE html>
 <html>
     <head>
+
         <title>Pidelo por Maps</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <script src="lib/js/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxwbFVqKVoA8WR6wmqsoBsuUEc45OvP5g&sensor=false" ></script>
-        <script src="lib/js/jquery.min.js"></script>
         <script type="text/javascript" src="lib/js/principal.js" ></script>
         <link rel="stylesheet" href="lib/css/principal.css" type="text/css" />
         <link rel="stylesheet" href="lib/css/bootstrap.min.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="lib/css/bootstrap-theme.min.css" type="text/css" />
-        <script src="lib/js/bootstrap.min.js"></script>
-
         <script type="text/javascript">
             google.maps.event.addDomListener(window, 'load', initialize);
+
+            $(function() {
+                
+                cargarMarcadores();
+            });
         </script>
+
     </head>
     <body>
         <a class='logout' href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] ?>/ubicaciones/index.php?logout">Logout</a>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-10">
-                    <h1>PIDELO CON MAPS</h1>
+                    <h1>Localización de Pedidos</h1>
                 </div>
             </div>
             <div class="row">
@@ -42,12 +46,12 @@ if (!isset($_SESSION['token'])) {
                             <?php
                             $link = mysql_connect('localhost', 'root', 'admin')or die('No se pudo conectar: ' . mysql_error());
                             mysql_select_db('ubicaciones') or die('No se pudo seleccionar la base de datos');
-                            $query = "select nombres,imagen,correo from usuarios where estado=1";
-                            
+                            $query = "select nombres,imagen,email from usuarios where estado=1";
+
                             $result = mysql_query($query) or die('Consulta fallida: ' . mysql_error());
                             // Imprimir los resultados en HTML
                             while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
-                                echo "<div><img src='".$line['imagen']."?sz=50'></div>".$line['nombres'];   
+                                echo "<div><img src='" . $line['imagen'] . "?sz=50'></div>" . $line['nombres'];
                             }
                             // Liberar resultados
                             mysql_free_result($result);
@@ -61,6 +65,8 @@ if (!isset($_SESSION['token'])) {
             </div>
         </div>
     </body>
+    <script type="text/javascript" src="lib/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="lib/js/validaciones.js"></script>
 </html>
 
 
@@ -70,14 +76,32 @@ if (!isset($_SESSION['token'])) {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Ingrese sus Observaciones</h4>
+                <h4 class="modal-title" id="myModalLabel">Ingresar Parrilladas</h4>
             </div>
             <div class="modal-body">
-                <textarea id="observaciones" class="form-control" rows="3"></textarea>
+
+                <div class="form-group col-xs-4">
+                    <label for="cantidad">Cantidad</label>
+                    <input class="form-control" type="number" name="cantidad" id="cantidad" onkeypress="return soloNumeros(event)"/>
+                </div>
+
+                <div class="form-group col-xs-5">
+                    <label for="contacto">Contacto</label>
+                    <input type="text" class="form-control" name="contacto" id="contacto" required="required" />
+                </div>
+
+                <div class="form-group col-xs-3">
+                    <label for="telefono">Telefono</label>
+                    <input type="tel" class="form-control" name="telefono" id="telefono" />
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Observaciones</label>
+                    <textarea class="form-control" name="observaciones" id="observaciones" ></textarea>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="cancel" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <button type="button" id="save" class="btn btn-primary">Guardar</button>
             </div>
         </div>
