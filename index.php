@@ -48,7 +48,7 @@ if ($client->getAccessToken()) {
     $_SESSION['imagen'] = $img;
     $_SESSION['email'] = $email;
 
-    $personMarkup = "$email<div><img src='$img?sz=200'></div>" . $name;
+    $personMarkup = "<div><img class='img-circle' src='$img?sz=200'></div><h4>" . $name . "<h4>";
 
     // The access token may have been updated lazily.
     $_SESSION['token'] = $client->getAccessToken();
@@ -70,6 +70,9 @@ $user_id = $facebook->getUser();
 <!doctype html>
 <html>
     <head><meta charset="utf-8">
+        <title>Pidelo con Maps</title>
+        <link rel="stylesheet" href="lib/css/bootstrap.min.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="lib/css/principal.css" type="text/css" />
         <link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
         <style>
             body {
@@ -78,15 +81,24 @@ $user_id = $facebook->getUser();
         </style>
     </head>
     <body>
-        <header><h1>Pidelo Con Maps</h1></header>
+        <?php
+            if ($_SESSION['autenticado']) {
+                print "<a class='logout pull-right' href='?logout'>Logout</a>";
+            }
+        ?>
+        <div class="container">
+            <div class="row text-center">
+        <header><h1>Pedidos Maps</h1></header>
         <?php if (isset($personMarkup)): ?>
             <?php print $personMarkup ?>
         <?php endif ?>
         <?php
         if (isset($authUrl) || !isset($user_id)) {
-            echo "Inicio Sesión con <a class='login' href='$authUrl'>Google</a></br>";
+            echo "<img src='lib/img/pollomarca.png' alt='' class='logo' />";
+            echo "<h4>Inicio Sesión con:</h4>";
+            echo "<a class='login btn btn-default' href='$authUrl'><img src='lib/img/google.svg' /> Google</a>";
             $login_url = $facebook->getLoginUrl();
-            echo 'Inicio Sesión con <a href="' . $login_url . '">Facebook</a>';
+            echo '<a class="btn btn-default" href="' . $login_url . '"><img src="lib/img/facebook.svg" /> Facebook</a>';
         } else {
             if ($user) {
                 try {
@@ -100,16 +112,12 @@ $user_id = $facebook->getUser();
                     $login_url = $facebook->getLoginUrl(array(
                         'scope' => 'user_status,publish_stream,user_photos,user_photo_video_tags'
                     ));
-
-                    echo 'Please <a href="' . $login_url . '">login.</a>';
+                    
                     error_log($e->getType());
                     error_log($e->getMessage());
                 }
             }
-            print "<a class='login' href='principal.php'>Ir a Mapa</a></br>";
-            if ($_SESSION['autenticado']) {
-                print "<a class='logout' href='?logout'>Logout</a></br>";
-            }
+            print "<br/><a class='login btn btn-success' href='principal.php'>Ir a Mapa</a></br>";
 
             //ingresa el usuario a la base de datos
             $link = mysql_connect('localhost', 'root', 'admin')or die('No se pudo conectar: ' . mysql_error());
@@ -123,4 +131,6 @@ $user_id = $facebook->getUser();
             mysql_close($link);
         }
         ?>
+            </div>
+            </div>  
     </body></html>

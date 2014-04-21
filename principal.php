@@ -25,7 +25,7 @@ if (!isset($_SESSION['token'])) {
 
     </head>
     <body>
-        <a class='logout' href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] ?>/ubicaciones/index.php?logout">Logout</a>
+        <a class='logout pull-right' href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] ?>/ubicaciones/index.php?logout">Logout</a>
         <input type="hidden" id="session_email" value="<?php echo $_SESSION['email'] ?>"/>
         <div class="container-fluid">
             <div class="row">
@@ -43,8 +43,8 @@ if (!isset($_SESSION['token'])) {
                     <div class="panel panel-default">
                         <div class="panel-heading"><h4>USUARIOS</h4></div>
                         <div class="panel-body">
-                            <div class="container-fluid">
-                                <div class="row">
+                            <div class="container-fluid usuarios">
+                                
 
                                     <?php
                                     $link = mysql_connect('localhost', 'root', 'admin')or die('No se pudo conectar: ' . mysql_error());
@@ -54,8 +54,12 @@ if (!isset($_SESSION['token'])) {
                                     $result = mysql_query($query) or die('Consulta fallida: ' . mysql_error());
                                     // Imprimir los resultados en HTML
                                     while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
-                                        echo "<div class='col-md-8'>"
-                                        . "<img src='" . $line['imagen'] . "?sz=50'></div>" . "<div class='col-md-9' >" . $line['nombres']
+                                        echo '<div class="row users">';
+                                        echo "<div class='col-md-3'>"
+                                            . "<img class='img-circle' src='" . $line['imagen'] . "?sz=50'>"
+                                                . "</div>" . 
+                                                "<div class='col-md-9' ><label class='user'>" . $line['nombres'] . "<label>"
+                                        . "</div>"
                                         . "</div>";
                                     }
                                     // Liberar resultados

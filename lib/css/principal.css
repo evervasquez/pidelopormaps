@@ -11,9 +11,34 @@ and open the template in the editor.
 html { 
     height: 100% 
 }
-body {
-    font-family: inherit;
-}
 #map-canvas, .panel { 
-    min-height: 550px;
+    min-height: 530px;
+}
+.btn {
+    margin: 0 10px;
+}
+.btn img {
+    width: 24px;
+}
+.logo {
+    width: 200px;
+}
+.pull-right{
+    float: right;
+    color: red;
+    padding: 10px;
+}
+.text-center {
+    text-align: center;
+}
+.user {
+    font-weight: normal;
+    padding-top: 0.7em;
+}
+.users {
+    padding: 0.2em 0;
+}
+.usuarios {
+    overflow-y: auto;
+    max-height: 450px;
 }
