@@ -1,13 +1,14 @@
 <?php
 session_start();
 if (!isset($_SESSION['token'])) {
-    echo "<script>window.location='" . 'http://' . $_SERVER['HTTP_HOST'] . '/ubicaciones/index.php' . "'</script>";
+    echo "<script>window.location='" . 'http://' . $_SERVER['HTTP_HOST'] . '/index.php' . "'</script>";
 }
 ?>
 <!DOCTYPE html>
 <html>
     <head>
         <title>Pidelo por Maps</title>
+        <meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
         <link rel="stylesheet" href="lib/css/bootstrap.min.css" type="text/css" media="screen" />
         <script src="https://desk-customers.s3.amazonaws.com/shared/sessvars.js" type="text/javascript"></script>
@@ -25,8 +26,8 @@ if (!isset($_SESSION['token'])) {
 
     </head>
     <body>
-        <a class='logout pull-right' href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] ?>/ubicaciones/index.php?logout">Logout</a>
-        <input type="hidden" id="session_email" value="<?php echo $_SESSION['email'] ?>"/>
+        <a class='logout pull-right' href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] ?>/index.php?logout">Logout</a>
+        <input type="hidden" id="session_id" value="<?php echo $_SESSION['idusuario'] ?>"/>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-10">
@@ -47,8 +48,8 @@ if (!isset($_SESSION['token'])) {
                                 
 
                                     <?php
-                                    $link = mysql_connect('localhost', 'root', 'admin')or die('No se pudo conectar: ' . mysql_error());
-                                    mysql_select_db('ubicaciones') or die('No se pudo seleccionar la base de datos');
+                                    $link = mysql_connect('localhost', 'u557356656_maps', 'parrilladas')or die('No se pudo conectar: ' . mysql_error());
+                                    mysql_select_db('u557356656_maps') or die('No se pudo seleccionar la base de datos');
                                     $query = "select nombres,imagen,email from usuarios where estado=1";
 
                                     $result = mysql_query($query) or die('Consulta fallida: ' . mysql_error());
